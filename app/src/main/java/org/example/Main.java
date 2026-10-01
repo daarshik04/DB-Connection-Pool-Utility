@@ -3,6 +3,7 @@ package org.example;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -27,7 +28,7 @@ public class Main {
         ConnectionPool pool = new ConnectionPool(config);
 
         // 3. Borrow a connection from the pool
-        Connection connection = pool.borrowConnection();
+        Connection connection = pool.borrowConnection(5, TimeUnit.SECONDS);
 
         try {
             // 4. Create SQL statement

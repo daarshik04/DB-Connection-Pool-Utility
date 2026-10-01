@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +42,7 @@ public class ConnectionPoolConcurrencyTest {
             Thread thread =new Thread(() ->{
                 try{
                     startSignal.await();
-                    Connection connection = pool.borrowConnection();
+                    Connection connection = pool.borrowConnection(5, TimeUnit.SECONDS);
 
                     synchronized(borrowedConnections){
                         borrowedConnections.add(connection);

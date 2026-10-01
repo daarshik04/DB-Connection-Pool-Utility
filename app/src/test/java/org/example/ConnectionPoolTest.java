@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,9 +33,9 @@ public class ConnectionPoolTest {
 
         ConnectionPool pool = new ConnectionPool(config);
 
-        Connection conn1 = pool.borrowConnection();
-        Connection  conn2 = pool.borrowConnection();
-        Connection conn3 = pool.borrowConnection();
+        Connection conn1 = pool.borrowConnection(10, TimeUnit.SECONDS);
+        Connection  conn2 = pool.borrowConnection(10, TimeUnit.SECONDS);
+        Connection conn3 = pool.borrowConnection(10, TimeUnit.SECONDS);
 
         assertNotNull(conn1);
         assertNotNull(conn2);
@@ -60,11 +61,11 @@ public class ConnectionPoolTest {
     
         ConnectionPool pool = new ConnectionPool(config);
     
-        Connection first = pool.borrowConnection();
+        Connection first = pool.borrowConnection(10, TimeUnit.SECONDS);
     
         pool.returnConnection(first);
     
-        Connection second = pool.borrowConnection();
+        Connection second = pool.borrowConnection(10, TimeUnit.SECONDS);
     
         assertSame(first, second);
     
@@ -84,11 +85,11 @@ public class ConnectionPoolTest {
 
         ConnectionPool pool =new ConnectionPool(config);
 
-        Connection conn1 = pool.borrowConnection();
+        Connection conn1 = pool.borrowConnection(10, TimeUnit.SECONDS);
 
         Thread thread = new Thread(() ->{
             try{
-                pool.borrowConnection();
+                pool.borrowConnection(10, TimeUnit.SECONDS);
             }catch(InterruptedException e){
                 Thread.currentThread().interrupt();
             }

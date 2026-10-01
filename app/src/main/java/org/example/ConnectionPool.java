@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class ConnectionPool {
     // Responsibilities:
@@ -32,8 +33,8 @@ public class ConnectionPool {
          }
     }
 
-    public Connection borrowConnection() throws InterruptedException{
-        return availableConnections.take();
+    public Connection borrowConnection(long timeout, TimeUnit unit) throws InterruptedException{
+        return availableConnections.poll(timeout, unit);
     }
 
     public void returnConnection(Connection connection)
